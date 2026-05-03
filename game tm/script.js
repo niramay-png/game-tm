@@ -17,7 +17,7 @@
 // If testing locally, use http://127.0.0.1:5000
 const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
     ? 'http://127.0.0.1:5000' 
-    : 'https://YOUR_BACKEND_APP_NAME.onrender.com'; 
+    : 'https://game-tm.onrender.com'; 
 
 // Replace this with your actual Google Client ID from Google Cloud Console
 // const GOOGLE_CLIENT_ID = "NOT_REQUIRED_FOR_EMAIL_LOGIN";
