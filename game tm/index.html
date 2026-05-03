@@ -1,0 +1,202 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness | GSFC University</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+    <!-- AUTH OVERLAY -->
+    <div id="auth-overlay" class="overlay">
+        <div class="auth-card">
+
+            <!-- Logo & Header -->
+            <div class="auth-header">
+                <div class="uni-logo">GSFCU<span>.</span></div>
+                <h2>Student Wellness Portal</h2>
+                <p class="auth-subtitle">GSFC University — Authorized Students Only</p>
+            </div>
+
+            <!-- TAB SWITCHER -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+            </div>
+
+            <!-- LOGIN PANEL -->
+            <div id="panel-login" class="auth-panel active-panel">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="text" id="login-email" placeholder="GSFC Email or Enrollment No." autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Password" autocomplete="current-password">
+                    <button class="toggle-pw" onclick="togglePw('login-password', this)" tabindex="-1"><i class="fas fa-eye"></i></button>
+                </div>
+                <div id="login-msg" class="auth-msg hidden"></div>
+                <button id="login-btn" class="glow-btn full-width" onclick="loginUser()">
+                    <i class="fas fa-shield-alt"></i> SECURE ACCESS
+                </button>
+                <p class="switch-hint">Don't have an account? <a href="#" onclick="switchTab('signup')">Sign Up</a></p>
+            </div>
+
+            <!-- SIGN UP PANEL -->
+            <div id="panel-signup" class="auth-panel hidden-panel">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signup-name" placeholder="Full Name">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signup-email" placeholder="25bca047@gsfcuniversity.ac.in" autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" id="signup-enrollment" placeholder="Enrollment No. (e.g., 25BCA047)">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signup-password" placeholder="Create Password (min. 6 characters)" autocomplete="new-password">
+                    <button class="toggle-pw" onclick="togglePw('signup-password', this)" tabindex="-1"><i class="fas fa-eye"></i></button>
+                </div>
+                <div id="signup-msg" class="auth-msg hidden"></div>
+                <button id="signup-btn" class="glow-btn full-width" onclick="signupUser()">
+                    <i class="fas fa-user-plus"></i> CREATE ACCOUNT
+                </button>
+                <p class="switch-hint">Already have an account? <a href="#" onclick="switchTab('login')">Login</a></p>
+            </div>
+
+            <!-- Email domain badge -->
+            <div class="domain-badge">
+                <i class="fas fa-shield-check"></i> Strictly for <strong>@gsfcuniversity.ac.in</strong> students
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div class="app-wrapper">
+        <aside class="sidebar">
+            <div class="brand">WELLNESS<span>GAME</span></div>
+            <nav>
+                <div class="nav-item active" onclick="showPage('home')"><i class="fas fa-th-large"></i> Dashboard</div>
+                <div class="nav-item" onclick="launchGame()"><i class="fas fa-play-circle"></i> Wellness Game</div>
+                <div class="nav-item" onclick="showPage('stats')"><i class="fas fa-chart-line"></i> Analytics</div>
+                <div class="nav-item" onclick="showPage('team')"><i class="fas fa-user-friends"></i> Our Team</div>
+            </nav>
+            <div class="user-pill">
+                <div class="user-info">
+                    <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+                    <span id="user-display">Student</span>
+                </div>
+                <button class="logout-btn" onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="home-page" class="page-section">
+                <div class="welcome-banner">
+                    <h1>Welcome back, <span id="welcome-name">Student</span>!</h1>
+                    <p id="welcome-course" style="color:var(--text-muted); margin-top:5px; font-size:0.95rem;"></p>
+                    <p>You've completed 75% of your wellness goals this week.</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card stat-card">
+                        <h3>Wellness Score</h3>
+                        <div class="progress-ring">
+                            <span id="dash-score">0</span>
+                        </div>
+                        <p>Keep going! You're in the <b>Warrior</b> tier.</p>
+                    </div>
+                    <div class="card update-card">
+                        <h3>Daily Updates</h3>
+                        <div class="feed-item">
+                            <span class="tag yellow">TIP OF THE DAY</span>
+                            <p id="tip-of-day">Loading today's wellness tip...</p>
+                        </div>
+                        <div class="feed-item">
+                            <span class="tag blue">INFO</span>
+                            <p>Over 70% of board students report feeling overwhelmed weekly. Take a break!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="stats-page" class="page-section hidden">
+                <div class="card full-card">
+                    <h2>Holistic Health Metrics</h2>
+                    <p>Data visualization based on your game performance.</p>
+                    <div class="placeholder-graph">
+                        <div class="bar-chart" style="display: flex; gap: 20px; align-items: flex-end; height: 200px; margin-top: 30px; border-bottom: 2px solid var(--border); padding-bottom: 10px;">
+                            <div class="bar" style="background: var(--accent); width: 60px; border-radius: 8px 8px 0 0; text-align: center; color: white; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; transition: height 0.5s ease;" id="stat-mental-bar"><span>0</span></div>
+                            <div class="bar" style="background: var(--success); width: 60px; border-radius: 8px 8px 0 0; text-align: center; color: white; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; transition: height 0.5s ease;" id="stat-physical-bar"><span>0</span></div>
+                        </div>
+                        <div style="display: flex; gap: 20px; margin-top: 10px;">
+                            <span style="width: 60px; text-align: center; font-weight: 600; font-size: 0.9rem;">Mental</span>
+                            <span style="width: 60px; text-align: center; font-weight: 600; font-size: 0.9rem;">Physical</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="team-page" class="page-section hidden">
+                <div class="team-grid">
+                    <div class="card team-card">
+                        <h3>Niramay Kharva</h3>
+                        <p>Team Leader/Game Designer | 25BCA047</p>
+                    </div>
+                    <div class="card team-card">
+                        <h3>Pruthvirajsinh Yadav</h3>
+                        <p>Developer | 25BCA045</p>
+                    </div>
+                    <div class="card team-card">
+                        <h3>Twinkle Patel</h3>
+                        <p>Web Designer | 25BCA046</p>
+                    </div>
+                    <div class="card team-card">
+                        <h3>Sarthak Thakkar</h3>
+                        <p>Developer | 25BCA048</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- GAME OVERLAY -->
+    <div id="game-overlay" class="game-overlay hidden">
+        <button class="close-game" onclick="closeGame()"><i class="fas fa-times"></i> EXIT</button>
+        <div class="game-box glass">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="game-progress"></div>
+            </div>
+            <p class="step-counter">Challenge <span id="current-step">1</span> of <span id="total-step">3</span></p>
+            <h2 id="q-text">Loading Challenge...</h2>
+            <div class="game-choices">
+                <button id="opt1" class="choice-btn">Option 1</button>
+                <div class="vs-circle">OR</div>
+                <button id="opt2" class="choice-btn">Option 2</button>
+            </div>
+
+            <div id="insight-panel" class="insight-overlay hidden">
+                <div class="insight-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Method of Mastery</h3>
+                    <p id="insight-text"></p>
+                    <button id="next-btn" class="glow-btn">CONTINUE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
