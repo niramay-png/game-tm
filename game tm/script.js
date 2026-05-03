@@ -123,11 +123,12 @@ function signupUser() {
     const name       = document.getElementById('signup-name').value.trim();
     const email      = document.getElementById('signup-email').value.trim().toLowerCase();
     const enrollment = document.getElementById('signup-enrollment').value.trim().toUpperCase();
-    const password   = document.getElementById('signup-password').value;
+    const course     = document.getElementById('signup-course').value;
+    const password   = document.getElementById('signup-password').value.trim();
 
     // Client-side validations
-    if (!name || !email || !enrollment || !password) {
-        return showMsg('signup-msg', 'Please fill in all fields.', 'error');
+    if (!name || !email || !enrollment || !password || !course) {
+        return showMsg('signup-msg', 'Please fill in all fields (including course).', 'error');
     }
     if (!isGSFCEmail(email)) {
         return showMsg('signup-msg', 'Only @gsfcuniversity.ac.in emails are allowed.', 'error');
@@ -143,7 +144,7 @@ function signupUser() {
     fetch(`${BACKEND_URL}/api/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, enrollment, password })
+        body: JSON.stringify({ name, email, enrollment, course, password })
     })
     .then(res => res.json())
     .then(data => {
@@ -154,6 +155,8 @@ function signupUser() {
             return showMsg('signup-msg', data.message, 'error');
         }
         showMsg('signup-msg', '✅ Account created! Redirecting to login...', 'success');
+        // Pre-fill login field
+        document.getElementById('login-email').value = email;
         setTimeout(() => switchTab('login'), 1800);
     })
     .catch(err => {
@@ -167,7 +170,7 @@ function signupUser() {
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 function loginUser() {
     const email    = document.getElementById('login-email').value.trim().toLowerCase();
-    const password = document.getElementById('login-password').value;
+    const password = document.getElementById('login-password').value.trim();
 
     if (!email || !password) {
         return showMsg('login-msg', 'Please enter your email and password.', 'error');

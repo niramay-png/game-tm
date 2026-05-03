@@ -61,7 +61,7 @@ def signup():
     email = data.get('email', '').strip().lower()
     enrollment = data.get('enrollment', '').strip().upper()
     course = data.get('course', '').strip()  # optional
-    password = data.get('password', '')
+    password = data.get('password', '').strip()
 
     # Server-side email domain check
     if not email.endswith('@gsfcuniversity.ac.in'):
@@ -107,7 +107,7 @@ def signup():
 def login():
     data = request.json
     identifier = data.get('email', '').strip().lower()
-    password = data.get('password', '')
+    password = data.get('password', '').strip()
     is_session = data.get('_session', False)
 
     # Check if the input is an email or enrollment ID
@@ -133,8 +133,13 @@ def login():
     # Skip password check for auto-login sessions
     if not is_session:
         password_hash = hash_password(password)
+        print(f"DEBUG: Login attempt for {identifier}")
+        print(f"DEBUG: Calculated hash: {password_hash}")
+        print(f"DEBUG: Stored hash:     {user[4]}")
         if user[4] != password_hash:
+            print(f"DEBUG: Password mismatch for {identifier}")
             return jsonify({'status': 'error', 'message': 'Incorrect password. Please try again.'}), 401
+        print(f"DEBUG: Password match for {identifier}")
 
     user_data = {
         'status': 'success',

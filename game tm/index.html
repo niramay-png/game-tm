@@ -64,6 +64,17 @@
                     <input type="text" id="signup-enrollment" placeholder="Enrollment No. (e.g., 25BCA047)">
                 </div>
                 <div class="input-group">
+                    <i class="fas fa-graduation-cap"></i>
+                    <select id="signup-course" style="width: 100%; border: none; background: transparent; color: var(--text); outline: none; padding: 5px;">
+                        <option value="" disabled selected>Select Your Course</option>
+                        <option value="BCA">BCA</option>
+                        <option value="B.Tech">B.Tech</option>
+                        <option value="B.Sc">B.Sc</option>
+                        <option value="BBA">BBA</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="signup-password" placeholder="Create Password (min. 6 characters)" autocomplete="new-password">
                     <button class="toggle-pw" onclick="togglePw('signup-password', this)" tabindex="-1"><i class="fas fa-eye"></i></button>
